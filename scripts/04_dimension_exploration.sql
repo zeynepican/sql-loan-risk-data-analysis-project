@@ -18,7 +18,7 @@ values to ensure correct interpretation during analysis.
 -- CUSTOMER DIMENSION EXPLORATION
 -- ============================================
 
--- Age distribution (customer demographic segmentation)
+-- Distinct age values recorded in the customer dimension
 SELECT DISTINCT age
 FROM gold_analytics.dim_customer
 ORDER BY age;
@@ -39,10 +39,11 @@ ORDER BY co_applicant_credit_type;
 
 -- Income segmentation
 -- NOTE:
--- Derived feature based on income ranges:
+-- Derived feature created during data transformation:
 -- low_income    : income < 3000
 -- middle_income : 3000 <= income <= 70000
 -- high_income   : income > 70000
+-- These thresholds are project-defined business rules.
 SELECT DISTINCT income_segment
 FROM gold_analytics.dim_customer
 ORDER BY income_segment;
@@ -143,25 +144,24 @@ ORDER BY submission_of_application;
 -- ============================================
 
 -- Negative amortization indicator
--- NOTE:
--- TRUE  = risky financial structure
--- FALSE = normal amortization structure
+-- TRUE  = negative amortization feature is present
+-- FALSE = negative amortization feature is not present
+-- Risk implications must be evaluated through further analysis.
 SELECT DISTINCT neg_amortization
 FROM gold_analytics.dim_application
 ORDER BY neg_amortization;
 
 -- Interest-only loan indicator
--- NOTE:
--- TRUE  = interest-only loan (higher risk)
--- FALSE = standard amortized loan
+-- TRUE  = interest-only loan structure
+-- FALSE = non-interest-only loan structure
+-- Risk implications must be evaluated through further analysis.
 SELECT DISTINCT is_interest_only
 FROM gold_analytics.dim_application
 ORDER BY is_interest_only;
 
 -- Lump sum payment indicator
--- NOTE:
--- TRUE  = lump sum repayment structure
--- FALSE = regular installment-based repayment
+-- TRUE  = lump sum payment feature is present
+-- FALSE = lump sum payment feature is not present
 SELECT DISTINCT is_lump_sum_payment
 FROM gold_analytics.dim_application
 ORDER BY is_lump_sum_payment;
@@ -176,10 +176,8 @@ SELECT DISTINCT debt_burden_segment
 FROM gold_analytics.fact_loan_application
 ORDER BY debt_burden_segment;
 
--- Target variable (loan default status)
--- NOTE:
--- TRUE  = loan defaulted (bad outcome)
--- FALSE = loan fully performing (good outcome)
+-- TRUE  = loan is marked as defaulted in the source data
+-- FALSE = loan is not marked as defaulted in the source data
 SELECT DISTINCT is_default
 FROM gold_analytics.fact_loan_application
 ORDER BY is_default;
