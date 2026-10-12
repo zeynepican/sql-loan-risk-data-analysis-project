@@ -4,11 +4,16 @@ DIMENSIONS EXPLORATION
 ====================================================
 
 Purpose:
-This script explores categorical and low-cardinality
-features across the analytics layer.
 
-It also documents business definitions of encoded
-values to ensure correct interpretation during analysis.
+This script explores distinct categorical values across the analytics layer to understand the available classifications and their distributions of possible values.
+
+The dimension tables contain distinct combinations of source attributes rather than verified unique business entities. 
+
+Therefore, distinct values in `dim_customer` and `dim_property` must not be interpreted as counts of unique customers or physical properties.
+
+Derived categories, such as `income_segment`, reflect business rules defined during data transformation. 
+
+Encoded values and risk-related interpretations should be validated against the source data dictionary and subsequent analytical results.
 
 ====================================================
 */
