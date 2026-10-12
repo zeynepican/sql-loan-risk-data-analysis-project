@@ -26,8 +26,7 @@ the most to the overall lending portfolio.
 
 /*
 Business Question:
-Which regions are associated with higher-value
-properties?
+Which regions have higher average property values across loan applications?
 
 Measures the average collateral value across
 different geographic regions.
@@ -37,13 +36,12 @@ SELECT region, AVG(property_value) AS avg_property_value
 FROM gold_analytics.fact_loan_application a
 LEFT JOIN gold_analytics.dim_property d
 ON a.property_id = d.property_id
-GROUP BY region
+GROUP BY region;
 
 
 /*
 Business Question:
-How does average borrower income differ by
-gender?
+How does average income vary across gender and joint-application categories?
 
 Measures income magnitude across gender groups.
 */
@@ -51,7 +49,7 @@ SELECT gender, AVG(income) AS avg_income
 FROM gold_analytics.fact_loan_application a
 LEFT JOIN gold_analytics.dim_customer c
 ON a.customer_id = c.customer_id
-GROUP BY gender
+GROUP BY gender;
 
 /*
 Business Question:
@@ -65,6 +63,7 @@ FROM gold_analytics.fact_loan_application a
 LEFT JOIN gold_analytics.dim_loan l
 ON a.loan_id = l.loan_id
 GROUP BY loan_type
+ORDER BY avg_loan_amount DESC;
 
 /*
 Business Question:
@@ -86,8 +85,7 @@ GROUP BY l.business_or_commercial, l.loan_type
 ORDER BY total_loan_amount DESC;
 /*
 Business Question:
-Which age groups generate the largest loan
-volumes?
+Which ages account for the largest loan volumes?
 
 Measures total lending exposure and average
 income across age categories.
@@ -100,7 +98,7 @@ FROM gold_analytics.fact_loan_application f
 LEFT JOIN gold_analytics.dim_customer c
 ON f.customer_id = c.customer_id
 GROUP BY age
-ORDER BY total_loan_amount DESC
+ORDER BY total_loan_amount DESC;
 /*
 Business Question:
 Which credit score segments account for the
@@ -121,8 +119,7 @@ ORDER BY total_loan_amount DESC;
 
 /*
 Business Question:
-Which property occupancy types contribute the
-largest collateral values?
+How do total and average property values vary across different occupancy types?
 
 Measures total and average property values by
 occupancy category.
@@ -166,14 +163,14 @@ SELECT
     SUM(f.loan_amount) AS total_loan_amount,
     AVG(f.loan_amount) AS avg_loan_amount
 FROM gold_analytics.fact_loan_application f
-JOIN gold_analytics.dim_credit_profile cp
+LEFT JOIN gold_analytics.dim_credit_profile cp
     ON f.credit_profile_id = cp.credit_profile_id
 GROUP BY cp.credit_type
 ORDER BY total_loan_amount DESC;
 /*
 Business Question:
 Which borrower debt burden segments account
-for the largest lending exposure?
+for the largest lending exposure?   
 
 Measures total loan volume and average debt-to-
 income ratio across debt burden categories.
@@ -198,15 +195,14 @@ SELECT
     SUM(f.loan_amount) AS total_loan_amount,
     AVG(f.loan_amount) AS avg_loan_amount
 FROM gold_analytics.fact_loan_application f
-JOIN gold_analytics.dim_loan l
+LEFT JOIN gold_analytics.dim_loan l
     ON f.loan_id = l.loan_id
 GROUP BY l.loan_limit
 ORDER BY total_loan_amount DESC;
 
 /*
 Business Question:
-Which region and income segment combinations
-generate the highest lending demand?
+Which region and income segment combinations have the highest average loan amounts?
 
 Measures application volume, total loan volume,
 average loan size, and average income across
@@ -223,7 +219,7 @@ FROM gold_analytics.fact_loan_application f
 LEFT JOIN gold_analytics.dim_property p ON f.property_id = p.property_id
 LEFT JOIN gold_analytics.dim_customer c ON f.customer_id = c.customer_id
 GROUP BY p.region, c.income_segment
-ORDER BY avg_loan_per_app DESC; -- En yüksek kredi iştahına göre sıraladık
+ORDER BY avg_loan_per_app DESC;   -- Sort by average loan amount per application.
 
 
 
