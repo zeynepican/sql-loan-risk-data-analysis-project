@@ -41,9 +41,10 @@ GROUP BY region;
 
 /*
 Business Question:
-How does average income vary across gender and joint-application categories?
+How does average recorded income vary across categories
+of the gender field?
 
-Measures income magnitude across gender groups.
+Measures average income across the recorded gender categories.
 */
 SELECT gender, AVG(income) AS avg_income
 FROM gold_analytics.fact_loan_application a
@@ -85,10 +86,10 @@ GROUP BY l.business_or_commercial, l.loan_type
 ORDER BY total_loan_amount DESC;
 /*
 Business Question:
-Which ages account for the largest loan volumes?
+Which age categories account for the largest loan volumes?
 
-Measures total lending exposure and average
-income across age categories.
+Measures total loan amount and average income
+across the age categories recorded in the source data.
 */
 SELECT 
 c.age,
@@ -101,11 +102,11 @@ GROUP BY age
 ORDER BY total_loan_amount DESC;
 /*
 Business Question:
-Which credit score segments account for the
-largest lending volumes?
+Which credit score segments account for the largest
+loan amounts across application records?
 
-Measures portfolio magnitude across borrower
-credit quality segments.
+Measures total loan amount and average credit score
+across credit score segments.
 */
 SELECT
     cp.credit_score_segment,
@@ -119,27 +120,27 @@ ORDER BY total_loan_amount DESC;
 
 /*
 Business Question:
-How do total and average property values vary across different occupancy types?
+How do recorded property values vary across occupancy types?
 
-Measures total and average property values by
-occupancy category.
+Measures the sum and average of property values
+recorded across loan application records.
+The sum does not represent the value of unique physical properties.
 */
 SELECT
     p.occupancy_type,
-    SUM(f.property_value) AS total_property_value,
+    SUM(f.property_value) AS sum_recorded_property_value,
     AVG(f.property_value) AS avg_property_value
 FROM gold_analytics.fact_loan_application f
 LEFT JOIN gold_analytics.dim_property p
     ON f.property_id = p.property_id
 GROUP BY p.occupancy_type
-ORDER BY total_property_value DESC;
+ORDER BY sum_recorded_property_value DESC;
 /*
 Business Question:
-Which security types support the largest loan
-portfolios?
+Which security type categories are associated with
+the largest total loan amounts across application records?
 
-Measures loan portfolio magnitude by security
-classification.
+Measures total and average loan amounts by security type.
 */
 SELECT
     l.security_type,
@@ -169,11 +170,11 @@ GROUP BY cp.credit_type
 ORDER BY total_loan_amount DESC;
 /*
 Business Question:
-Which borrower debt burden segments account
-for the largest lending exposure?   
+Which debt burden segments account for the largest
+loan amounts across application records?
 
-Measures total loan volume and average debt-to-
-income ratio across debt burden categories.
+Measures total loan amount and average debt-to-income
+ratio across debt burden segments.
 */
 SELECT
     debt_burden_segment,
