@@ -53,10 +53,7 @@ The reporting phase consolidates analytical metrics into reusable PostgreSQL vie
 | `14_loan_portfolio_report.sql` | Analyzes application volume, loan amounts, and default performance by loan type. |
 | `15_credit_risk_summary_report.sql` | Summarizes default performance by credit score segment, credit type, and application-related categories. |
 
-flowchart LR
-    A([1. Veri Hazırlığı & Kurulum]) --> B([2. Veri Temizleme & Staging])
-    B --> C([3. SQL Analizi & EDA])
-    C --> D([4. Risk Metrikleri & Raporlama])
+
 
 
 
